@@ -3,11 +3,14 @@
 import { FC, FormEvent, useState } from 'react';
 import { v4 as uuid } from 'uuid';
 import { Message } from '../typings';
+import useSWR from 'swr';
+import fetcher from '../utils/fetchMessages';
 
 interface ChatInputProps {}
 
 const ChatInput: FC<ChatInputProps> = ({}) => {
     const [input, setInput] = useState('');
+    const { data, error, mutate } = useSWR('/api/getMessages', fetcher);
 
     // handle send message
     /**
