@@ -5,10 +5,13 @@ import { v4 as uuid } from 'uuid';
 import { Message } from '../typings';
 import useSWR from 'swr';
 import fetcher from '../utils/fetchMessages';
+import { unstable_getServerSession } from 'next-auth';
 
-interface ChatInputProps {}
+interface ChatInputProps {
+    session: Awaited<ReturnType<typeof unstable_getServerSession>>;
+}
 
-const ChatInput: FC<ChatInputProps> = ({}) => {
+const ChatInput: FC<ChatInputProps> = ({ session }) => {
     const [input, setInput] = useState('');
     const {
         data: messages,
@@ -69,6 +72,7 @@ const ChatInput: FC<ChatInputProps> = ({}) => {
             <input
                 type="text"
                 value={input}
+                disabled={!session}
                 onChange={(e) => setInput(e.target.value)}
                 placeholder="Enter message here..."
                 className="flex-1 px-5 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent disabled:opacity-50 disabled:cursor-not-allowed"
