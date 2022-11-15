@@ -10,13 +10,19 @@ interface ChatInputProps {}
 
 const ChatInput: FC<ChatInputProps> = ({}) => {
     const [input, setInput] = useState('');
-    const { data, error, mutate } = useSWR('/api/getMessages', fetcher);
+    const {
+        data: messages,
+        error,
+        mutate,
+    } = useSWR('/api/getMessages', fetcher);
+
+    console.log(messages);
 
     // handle send message
     /**
      * @TODO add message to to MessageList
      */
-    const addMessage = (e: FormEvent<HTMLFormElement>) => {
+    const addMessage = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
         if (!input) return;
@@ -48,10 +54,13 @@ const ChatInput: FC<ChatInputProps> = ({}) => {
 
             const data = await res.json();
 
-            console.log('MESSAGE ADDED >>>>', data);
+            return [data.message, ...messages!];
         };
 
-        uploadMessageToUpstash();
+        await mutate(uploadMessageToUpstash, {
+            optimisticData: [message, ...messages!],
+            rollbackOnError: true,
+        });
     };
 
     return (
