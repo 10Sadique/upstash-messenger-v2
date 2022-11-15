@@ -1,5 +1,8 @@
 'use client';
+
 import { FC, FormEvent, useState } from 'react';
+import { v4 as uuid } from 'uuid';
+import { Message } from '../typings';
 
 interface ChatInputProps {}
 
@@ -16,9 +19,36 @@ const ChatInput: FC<ChatInputProps> = ({}) => {
         if (!input) return;
 
         const messageToSend = input;
-        console.log(messageToSend);
 
         setInput('');
+
+        const id = uuid();
+
+        const message: Message = {
+            id,
+            message: messageToSend,
+            created_at: Date.now(),
+            username: 'Jafar Sadique Jahan',
+            profilePic:
+                'https://i.ibb.co/PDXd646/310317041-3311986205744919-4296449563688039137-n.jpg',
+            email: 'jafarsjahan@gmail.com',
+        };
+
+        const uploadMessageToUpstash = async () => {
+            const res = await fetch(`/api/addMessage`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ message }),
+            });
+
+            const data = await res.json();
+
+            console.log('MESSAGE ADDED >>>>', data);
+        };
+
+        uploadMessageToUpstash();
     };
 
     return (
