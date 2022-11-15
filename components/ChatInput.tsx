@@ -16,8 +16,6 @@ const ChatInput: FC<ChatInputProps> = ({}) => {
         mutate,
     } = useSWR('/api/getMessages', fetcher);
 
-    console.log(messages);
-
     // handle send message
     /**
      * @TODO add message to to MessageList
@@ -66,7 +64,7 @@ const ChatInput: FC<ChatInputProps> = ({}) => {
     return (
         <form
             onSubmit={addMessage}
-            className="fixed bottom-0 z-50 flex items-center w-full px-10 py-5 space-x-2 border-t border-gray-100"
+            className="fixed bottom-0 z-50 flex items-center w-full px-10 py-5 space-x-2 bg-white border-t border-gray-200"
         >
             <input
                 type="text"
