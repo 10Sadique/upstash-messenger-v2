@@ -7,9 +7,11 @@ import MessageComponent from './MessageComponent';
 import { clientPusher } from '../pusher';
 import { Message } from '../typings';
 
-interface MessageListProps {}
+interface MessageListProps {
+    initialMessages: Message[];
+}
 
-const MessageList: FC<MessageListProps> = ({}) => {
+const MessageList: FC<MessageListProps> = ({ initialMessages }) => {
     const {
         data: messages,
         error,
@@ -41,7 +43,7 @@ const MessageList: FC<MessageListProps> = ({}) => {
 
     return (
         <div className="max-w-2xl px-5 pt-8 pb-32 mx-auto space-y-5 xl:max-w-4xl">
-            {messages?.map((message) => (
+            {(messages || initialMessages).map((message) => (
                 <MessageComponent key={message.id} message={message} />
             ))}
         </div>
