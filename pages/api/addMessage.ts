@@ -2,6 +2,7 @@ import { Message } from './../../typings.d';
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from 'next'
 import redis from '../../redis';
+import { serverPusher } from '../../pusher';
 
 type Data = {
     message: Message;
@@ -28,6 +29,9 @@ export default async function handler(
 
     // push to upstash redis
     await redis.hset('messages', message.id, JSON.stringify(newMessage))
+
+    // server pusher
+    serverPusher.trigger('messages', 'new-message', newMessage)
 
     res.status(200).json({ message: newMessage })
 }
