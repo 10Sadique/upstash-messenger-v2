@@ -1,30 +1,30 @@
 import { ChatBubbleOvalLeftEllipsisIcon } from '@heroicons/react/24/solid';
+import { unstable_getServerSession } from 'next-auth';
 import Image from 'next/image';
 import Link from 'next/link';
 import LogoutButton from './LogoutButton';
 
-const Header = () => {
+const Header = async () => {
     // session from next auth
-    /**
-     * @todo pull session from next-auth
-     */
-    const session = true;
+    const session = await unstable_getServerSession();
 
     if (session) {
         return (
             <header className="sticky top-0 z-50 flex items-center justify-between px-10 py-3 bg-white shadow-sm">
                 <div className="flex space-x-2">
                     <Image
-                        className="object-contain mx-2 rounded-full"
-                        height={10}
+                        className="object-cover mx-2 rounded-full"
+                        height={50}
                         width={50}
                         alt="Profile Picture"
                         // src={session?.user?.image}
-                        src={`https://links.papareact.com/jne`}
+                        src={session.user?.image!}
                     />
                     <div>
                         <p className="text-blue-400">Logged in as:</p>
-                        <p className="text-lg font-bold">Jafar Sadique Jahan</p>
+                        <p className="text-lg font-bold">
+                            {session.user?.name}
+                        </p>
                     </div>
                 </div>
                 <LogoutButton />

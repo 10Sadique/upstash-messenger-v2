@@ -1,3 +1,4 @@
+import { useSession } from 'next-auth/react';
 import Image from 'next/image';
 import { FC } from 'react';
 import { Message } from '../typings';
@@ -7,7 +8,8 @@ interface MessageComponentProps {
 }
 
 const MessageComponent: FC<MessageComponentProps> = ({ message }) => {
-    const isUser = true;
+    const { data: session } = useSession();
+    const isUser = session?.user?.email === message.email;
 
     return (
         <div className={`flex w-fit ${isUser && 'ml-auto'}`}>

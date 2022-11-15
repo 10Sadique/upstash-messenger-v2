@@ -26,7 +26,7 @@ const ChatInput: FC<ChatInputProps> = ({ session }) => {
     const addMessage = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
-        if (!input) return;
+        if (!input || !session) return;
 
         const messageToSend = input;
 
@@ -38,10 +38,9 @@ const ChatInput: FC<ChatInputProps> = ({ session }) => {
             id,
             message: messageToSend,
             created_at: Date.now(),
-            username: 'Jafar Sadique Jahan',
-            profilePic:
-                'https://i.ibb.co/PDXd646/310317041-3311986205744919-4296449563688039137-n.jpg',
-            email: 'jafarsjahan@gmail.com',
+            username: session?.user?.name!,
+            profilePic: session?.user?.image!,
+            email: session?.user?.email!,
         };
 
         const uploadMessageToUpstash = async () => {
